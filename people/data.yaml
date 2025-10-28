@@ -3,4 +3,4 @@ val: ../valid/images
 test: ../test/images
 
 nc: 2
-names: ['0', '1']
+names: ["0", "1"]
