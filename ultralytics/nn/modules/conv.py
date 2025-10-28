@@ -9,26 +9,23 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-
 __all__ = (
+    "CBAM",
+    "ChannelAttention",
+    "Concat",
     "Conv",
     "Conv2",
-    "LightConv",
+    "ConvTranspose",
     "DWConv",
     "DWConvTranspose2d",
-    "ConvTranspose",
     "Focus",
     "GhostConv",
-    "ChannelAttention",
-    "SpatialAttention",
-    "CBAM",
-    "Concat",
-    "RepConv",
     "Index",
+    "LightConv",
     "MyMP",
+    "RepConv",
+    "SpatialAttention",
 )
-
-from fontTools.designspaceLib.split import LOGGER
 
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
@@ -71,7 +68,7 @@ class Conv(nn.Module):
         self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p, d), groups=g, dilation=d, bias=False)
         self.bn = nn.BatchNorm2d(c2)
         self.act = self.default_act if act is True else act if isinstance(act, nn.Module) else nn.Identity()
-        #self.c1=c1
+        # self.c1=c1
 
     def forward(self, x):
         """
@@ -83,7 +80,7 @@ class Conv(nn.Module):
         Returns:
             (torch.Tensor): Output tensor.
         """
-        #print(f"\nConv loading channel={self.c1}\n")
+        # print(f"\nConv loading channel={self.c1}\n")
         return self.act(self.bn(self.conv(x)))
 
     def forward_fuse(self, x):
@@ -719,6 +716,7 @@ class Index(nn.Module):
         """
         return x[self.index]
 
+
 class MyMP(nn.Module):
     """A simple demo module that prints a message when executed."""
 
@@ -738,7 +736,6 @@ class MyMP(nn.Module):
 
     def forward(self, x):
         """Forward pass that just prints a message and returns x unchanged."""
-        print(f"\nthis is MyMP  -- channel_in={self.c1}, channel_out={self.c2}\n",flush=True)
-        #LOGGER.info(f"\nthis is MyMP  -- channel_in={self.c1}, channel_out={self.c2}\n")
+        print(f"\nthis is MyMP  -- channel_in={self.c1}, channel_out={self.c2}\n", flush=True)
+        # LOGGER.info(f"\nthis is MyMP  -- channel_in={self.c1}, channel_out={self.c2}\n")
         return self.identity(x)
-
