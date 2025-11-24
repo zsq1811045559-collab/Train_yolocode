@@ -8,17 +8,20 @@ from typing import Any
 import cv2
 import numpy as np
 
-from ultralytics.solutions.solutions import BaseSolution, SolutionAnnotator, SolutionResults
+from ultralytics.solutions.solutions import (
+    BaseSolution,
+    SolutionAnnotator,
+    SolutionResults,
+)
 from ultralytics.utils import LOGGER
 from ultralytics.utils.checks import check_imshow
 
 
 class ParkingPtsSelection:
-    """
-    A class for selecting and managing parking zone points on images using a Tkinter-based UI.
+    """A class for selecting and managing parking zone points on images using a Tkinter-based UI.
 
-    This class provides functionality to upload an image, select points to define parking zones, and save the
-    selected points to a JSON file. It uses Tkinter for the graphical user interface.
+    This class provides functionality to upload an image, select points to define parking zones, and save the selected
+    points to a JSON file. It uses Tkinter for the graphical user interface.
 
     Attributes:
         tk (module): The Tkinter module for GUI operations.
@@ -110,7 +113,10 @@ class ParkingPtsSelection:
 
     def upload_image(self) -> None:
         """Upload and display an image on the canvas, resizing it to fit within specified dimensions."""
-        from PIL import Image, ImageTk  # Scoped import because ImageTk requires tkinter package
+        from PIL import (  # Scoped import because ImageTk requires tkinter package
+            Image,
+            ImageTk,
+        )
 
         file = self.filedialog.askopenfilename(filetypes=[("Image Files", "*.png *.jpg *.jpeg")])
         if not file:
@@ -168,7 +174,9 @@ class ParkingPtsSelection:
         scale_w, scale_h = self.imgw / self.canvas.winfo_width(), self.imgh / self.canvas.winfo_height()
         data = [{"points": [(int(x * scale_w), int(y * scale_h)) for x, y in box]} for box in self.rg_data]
 
-        from io import StringIO  # Function level import, as it's only required to store coordinates
+        from io import (
+            StringIO,  # Function level import, as it's only required to store coordinates
+        )
 
         write_buffer = StringIO()
         json.dump(data, write_buffer, indent=4)
@@ -178,11 +186,10 @@ class ParkingPtsSelection:
 
 
 class ParkingManagement(BaseSolution):
-    """
-    Manages parking occupancy and availability using YOLO model for real-time monitoring and visualization.
+    """Manages parking occupancy and availability using YOLO model for real-time monitoring and visualization.
 
-    This class extends BaseSolution to provide functionality for parking lot management, including detection of
-    occupied spaces, visualization of parking regions, and display of occupancy statistics.
+    This class extends BaseSolution to provide functionality for parking lot management, including detection of occupied
+    spaces, visualization of parking regions, and display of occupancy statistics.
 
     Attributes:
         json_file (str): Path to the JSON file containing parking region details.
@@ -221,8 +228,7 @@ class ParkingManagement(BaseSolution):
         self.dc = (255, 0, 189)  # Centroid color for each box
 
     def process(self, im0: np.ndarray) -> SolutionResults:
-        """
-        Process the input image for parking lot management and visualization.
+        """Process the input image for parking lot management and visualization.
 
         This function analyzes the input image, extracts tracks, and determines the occupancy status of parking
         regions defined in the JSON file. It annotates the image with occupied and available parking spots,
@@ -233,7 +239,8 @@ class ParkingManagement(BaseSolution):
 
         Returns:
             (SolutionResults): Contains processed image `plot_im`, 'filled_slots' (number of occupied parking slots),
-                'available_slots' (number of available parking slots), and 'total_tracks' (total number of tracked objects).
+                'available_slots' (number of available parking slots), and 'total_tracks' (total number of
+                tracked objects).
 
         Examples:
             >>> parking_manager = ParkingManagement(json_file="parking_regions.json")

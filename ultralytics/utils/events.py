@@ -8,7 +8,16 @@ from threading import Thread
 from urllib.request import Request, urlopen
 
 from ultralytics import SETTINGS, __version__
-from ultralytics.utils import ARGV, ENVIRONMENT, GIT, IS_PIP_PACKAGE, ONLINE, PYTHON_VERSION, RANK, TESTS_RUNNING
+from ultralytics.utils import (
+    ARGV,
+    ENVIRONMENT,
+    GIT,
+    IS_PIP_PACKAGE,
+    ONLINE,
+    PYTHON_VERSION,
+    RANK,
+    TESTS_RUNNING,
+)
 from ultralytics.utils.downloads import GITHUB_ASSETS_NAMES
 from ultralytics.utils.torch_utils import get_cpu_info
 
@@ -24,8 +33,7 @@ def _post(url: str, data: dict, timeout: float = 5.0) -> None:
 
 
 class Events:
-    """
-    Collect and send anonymous usage analytics with rate-limiting.
+    """Collect and send anonymous usage analytics with rate-limiting.
 
     Event collection and transmission are enabled when sync is enabled in settings, the current process is rank -1 or 0,
     tests are not running, the environment is online, and the installation source is either pip or the official
@@ -71,8 +79,7 @@ class Events:
         )
 
     def __call__(self, cfg, device=None) -> None:
-        """
-        Queue an event and flush the queue asynchronously when the rate limit elapses.
+        """Queue an event and flush the queue asynchronously when the rate limit elapses.
 
         Args:
             cfg (IterableSimpleNamespace): The configuration object containing mode and task information.
